@@ -9,9 +9,10 @@ class CalcController {
         this._currentDate;
         this.initialize();
         this.initButtonsEvents();
+        this._operation = [];
 
 
- 
+
     }
 
     initialize() {
@@ -24,48 +25,123 @@ class CalcController {
 
         }, 1000);// atualiza a hora a cada 1000 milisegundos
     }
-// metodo pra definir todos os parametros de data e hora
- 
-    addEventListenerAll(element,events,fn){
+    // metodo pra definir todos os parametros de data e hora
 
-    events.split(' ').forEach(event=>{
+    addEventListenerAll(element, events, fn) {
 
-        element.addEventListener(event,fn ,false)
+        events.split(' ').forEach(event => {
 
-    });
-            
+            element.addEventListener(event, fn, false)
+
+        });
+
     }
 
-    initButtonsEvents(){
+    cA() {
+
+        this._operation = [];
+
+    }
+
+    cE(){
+
+        this._operation.pop();
+
+    }
+
+    addOperation(value){
+
+        this._operation.push(value);
+
+        console.log(this._operation);
+
+    }     
+
+    execBtn(value) {
+
+        switch(value) {
+
+            case 'ac':
+                this.cA();
+                break;
+
+            case 'ce':
+                this.cE(); 
+                break;
+
+            case 'soma':
+                
+                break;
+
+            case 'subtracao':
+               
+                break;
+
+            case 'divisao':
+               
+                break;
+
+            case 'multiplicacao':
+                
+                break;
+
+            case 'porcento':
+            
+                break;
+
+
+            case 'igual':
+              
+                break;
+
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            this.addOperation(parseInt(value));
+            break;
+
+        }
+    }
+
+    initButtonsEvents() {
 
         let buttons = document.querySelectorAll("#buttons > g , #parts > g ");
-        
-        buttons.forEach((btn , index) => {
 
-            this.addEventListenerAll( btn, "click drag", e => { 
- 
-                console.log(btn.className.baseVal.replace("btn-"," "));
-    
+        buttons.forEach((btn, index) => {
+
+            this.addEventListenerAll(btn, "click drag", e => {
+
+                let textBtn = btn.className.baseVal.replace("btn-", " ");
+                //console.log(textBtn)
+                this.execBtn(textBtn);
+
             });
 
-            this.addEventListenerAll(btn , "mouseover mouseup mousedown", e =>{
+            this.addEventListenerAll(btn, "mouseover mouseup mousedown", e => {
 
                 btn.style.cursor = "pointer";
 
             });
-            
+
         });
-       
+
 
     }
-     
+
     setDisplayDateTime() {
 
-        this.displayDate = this.currentDate.toLocaleDateString(this._locale,{
+        this.displayDate = this.currentDate.toLocaleDateString(this._locale, {
 
-            day:"2-digit",
-            month:"short",
-            year:"numeric"
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
 
         });
         this.displayTime = this.currentDate.toLocaleTimeString(this._locale);
