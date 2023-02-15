@@ -23,21 +23,35 @@ class CalcController {
             this.setDisplayDateTime();
 
         }, 1000);// atualiza a hora a cada 1000 milisegundos
-
-
     }
 // metodo pra definir todos os parametros de data e hora
  
+    addEventListenerAll(element,events,fn){
+
+    events.split(' ').forEach(event=>{
+
+        element.addEventListener(event,fn ,false)
+
+    });
+            
+    }
+
     initButtonsEvents(){
 
         let buttons = document.querySelectorAll("#buttons > g , #parts > g ");
         
         buttons.forEach((btn , index) => {
 
-            btn.addEventListener('click', e => { 
+            this.addEventListenerAll( btn, "click drag", e => { 
  
-                console.log(btn);
+                console.log(btn.className.baseVal.replace("btn-"," "));
     
+            });
+
+            this.addEventListenerAll(btn , "mouseover mouseup mousedown", e =>{
+
+                btn.style.cursor = "pointer";
+
             });
             
         });
