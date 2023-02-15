@@ -37,36 +37,50 @@ class CalcController {
 
     }
 
-    cA() {
+    aC() {
 
         this._operation = [];
+        console.log("aC")
 
     }
 
-    cE(){
+    cE() {
 
         this._operation.pop();
+
+    }
+
+    getLastOperation(value) {
+
+        return this._operation[this._operation.length - 1];
 
     }
 
     addOperation(value){
 
         this._operation.push(value);
-
         console.log(this._operation);
 
-    }     
+        
 
-    execBtn(value) {
+    }
 
-        switch(value) {
+    setError(){
+
+        this.displayCalc = "Error";
+        
+    }
+
+    execBtn(value){
+
+        switch (value) {
 
             case 'ac':
-                this.cA();
+                this.clearAll();
                 break;
 
             case 'ce':
-                this.cE(); 
+                this.clearEntry();
                 break;
 
             case 'soma':
@@ -74,24 +88,19 @@ class CalcController {
                 break;
 
             case 'subtracao':
-               
+                
                 break;
 
             case 'divisao':
-               
-                break;
-
-            case 'multiplicacao':
                 
                 break;
 
             case 'porcento':
-            
+                
                 break;
 
-
             case 'igual':
-              
+                
                 break;
 
             case '0':
@@ -107,8 +116,14 @@ class CalcController {
             this.addOperation(parseInt(value));
             break;
 
+            default:
+            this.setError();
+            break;
+
         }
+
     }
+
 
     initButtonsEvents() {
 
@@ -118,11 +133,11 @@ class CalcController {
 
             this.addEventListenerAll(btn, "click drag", e => {
 
-                let textBtn = btn.className.baseVal.replace("btn-", " ");
+                let textBtn = btn.className.baseVal.replace("btn-", "");
                 //console.log(textBtn)
                 this.execBtn(textBtn);
 
-            });
+            })
 
             this.addEventListenerAll(btn, "mouseover mouseup mousedown", e => {
 
