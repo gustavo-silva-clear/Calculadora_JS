@@ -2,6 +2,9 @@
 class CalcController {
 
     constructor() {
+
+        this._lastOperator = '';
+        this._lastNumber = '';
         this._operation = [];
         this._locale = 'pt-BR'
         this._displayCalcEl = document.querySelector("#display");
@@ -10,10 +13,6 @@ class CalcController {
         this._currentDate;
         this.initialize();
         this.initButtonsEvents();
-        
-
-
-
     }
 
     //Todos os parametros que devem iniciar com a aplicação esttão aqui
@@ -90,24 +89,53 @@ class CalcController {
 
             this.calc();
 
-            console.log(this._operation);
+         //   console.log(this._operation);
 
         }
 
 
     }
 
+    getResult(){
+    
+        return eval(this._operation.join("")); 
+       
+    }
+
     calc(){
         let last = '';
 
-        if(this._operation.length > 3)
-        {
+        this._lastOperator = this.getLastItem();
 
-            last = this._operation.pop(); 
+        if(this._operation.length < 3)
+        {
+            let fi = this._operation[0];
+            this._operation = [fi , this._lastOperator , this._lastNumber];
+
 
         }
 
-        let result = eval(this._operation.join(""));
+        if(this._operation.length > 3)
+        {            
+            last = this._operation.pop(); 
+            let result = this.getResult();
+
+            this._lastOperator = this.getLastItem();
+            this._lastNumber = this.getResult();
+
+        }
+
+        else if (this._operation.length == 3)
+        {
+
+            this._lastNumber = this.getLastItem(false);
+
+        }
+
+        console.log('Lo', this._lastOperator);
+        console.log('Ln', this._lastNumber);
+
+        let result = this.getResult(); 
 
         if (last == '%') {
 
@@ -137,20 +165,35 @@ class CalcController {
 
     }
 
+    getLastItem(isOperator = true){
 
-    setLastNunberToDisplay() {
-
-        let lastNumber;
+        let lastItem;
 
         for (let n = this._operation.length - 1; n >= 0; n--) {
 
-            if (!this.isOperator(this._operation[n])) {
-                lastNumber = this._operation[n];
+            if (this.isOperator(this._operation[n]) == isOperator) {
+                lastItem = this._operation[n];
                 break;
 
             }
 
         }
+
+        if(!lastItem)
+        {
+
+            lastItem = (isOperator)  ? this._lastOperator : this._lastNumber;
+
+        }
+
+        return lastItem;
+
+
+    }
+
+    setLastNunberToDisplay() {
+
+        let lastNumber = this.getLastItem(false);
 
         if (!lastNumber) lastNumber = 0;
 
