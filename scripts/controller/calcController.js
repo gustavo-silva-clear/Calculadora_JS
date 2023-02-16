@@ -13,6 +13,7 @@ class CalcController {
         this._currentDate;
         this.initialize();
         this.initButtonsEvents();
+        this.initKeyboard();
     }
 
     //Todos os parametros que devem iniciar com a aplicação esttão aqui
@@ -31,6 +32,58 @@ class CalcController {
 
 
 
+    }
+
+    initKeyboard() {
+
+        document.addEventListener('keydown', e => {
+
+
+            switch (e.key) {
+
+                case 'Escape':
+                    this.aC();
+                    break;
+
+                case 'BackSpace':
+                    this.cE();
+                    break;
+
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                case '%':
+                    this.addOperation(e.key);
+                    break;
+
+                    case 'Enter':
+                    case '=':
+                    this.calc();
+                    break;
+
+                case '.':
+                case ',':
+                
+                    this.addPoint();
+                    break;
+
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    this.addOperation(parseInt(e.key));
+                    break;
+
+            }
+
+        })
     }
 
 
@@ -65,7 +118,7 @@ class CalcController {
 
     getLastOperation(value) {
 
-        return this._operation[this._operation.length-1];
+        return this._operation[this._operation.length - 1];
 
     }
 
@@ -125,8 +178,6 @@ class CalcController {
 
         }
 
-        console.log('Lo', this._lastOperator);
-        console.log('Ln', this._lastNumber);
 
         let result = this.getResult();
 
@@ -224,7 +275,7 @@ class CalcController {
             else {
                 //Nunber
                 let newValue = this.getLastOperation().toString() + value.toString();
-                this.setLastOperation(parseFloat(newValue));
+                this.setLastOperation(newValue);
 
                 this.setLastNumberToDisplay();
             }
@@ -242,14 +293,13 @@ class CalcController {
 
     addPoint() {
 
-    let lastOper = this.getLastOperation();
+        let lastOper = this.getLastOperation();
 
-        if(this.isOperator(lastOper) || !lastOper)
-        {
+        if (typeof lastOper === 'string' && lastOper.split('').indexOf('.') > -1) return;
+        if (this.isOperator(lastOper) || !lastOper) {
             this.pushOperation('0.');
         }
-        else
-        {
+        else {
             this.setLastOperation(lastOper.toString() + '.');
         }
         this.setLastNumberToDisplay();
