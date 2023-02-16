@@ -18,9 +18,9 @@ class CalcController {
     //Todos os parametros que devem iniciar com a aplicação esttão aqui
     initialize() {
 
-        this.setLastNunberToDisplay();
-        
-        
+        this.setLastNumberToDisplay();
+
+
         this.setDisplayDateTime();
 
         setInterval(() => {
@@ -47,8 +47,10 @@ class CalcController {
     aC() {
 
         this._operation = [];
+        this._lastNumber = '';
+        this._lastOperator = '';
 
-        this.setLastNunberToDisplay();
+        this.setLastNumberToDisplay();
 
     }
 
@@ -56,14 +58,14 @@ class CalcController {
 
         this._operation.pop();
 
-        this.setLastNunberToDisplay();
+        this.setLastNumberToDisplay();
 
 
     }
 
     getLastOperation(value) {
 
-        return this._operation[this._operation.length - 1];
+        return this._operation[this._operation.length-1];
 
     }
 
@@ -89,44 +91,35 @@ class CalcController {
 
             this.calc();
 
-         //   console.log(this._operation);
+            //   console.log(this._operation);
 
         }
 
 
     }
 
-    getResult(){
-    
-        return eval(this._operation.join("")); 
-       
+    getResult() {
+
+        return eval(this._operation.join(""));
+
     }
 
-    calc(){
+    calc() {
         let last = '';
 
         this._lastOperator = this.getLastItem();
 
-        if(this._operation.length < 3)
-        {
+        if (this._operation.length < 3) {
             let fi = this._operation[0];
-            this._operation = [fi , this._lastOperator , this._lastNumber];
-
-
+            this._operation = [fi, this._lastOperator, this._lastNumber];
         }
 
-        if(this._operation.length > 3)
-        {            
-            last = this._operation.pop(); 
-            let result = this.getResult();
-
-            this._lastOperator = this.getLastItem();
+        if (this._operation.length > 3) {
+            last = this._operation.pop();
             this._lastNumber = this.getResult();
-
         }
 
-        else if (this._operation.length == 3)
-        {
+        else if (this._operation.length == 3) {
 
             this._lastNumber = this.getLastItem(false);
 
@@ -135,7 +128,7 @@ class CalcController {
         console.log('Lo', this._lastOperator);
         console.log('Ln', this._lastNumber);
 
-        let result = this.getResult(); 
+        let result = this.getResult();
 
         if (last == '%') {
 
@@ -146,26 +139,21 @@ class CalcController {
         }
 
         else {
-           
+
 
             this._operation = [result];
 
-            if(last) 
-            {
-
-                this._operation.push(last);
-
-            }
+            if (last) this._operation.push(last);
 
 
         }
 
-        this.setLastNunberToDisplay();
+        this.setLastNumberToDisplay();
 
 
     }
 
-    getLastItem(isOperator = true){
+    getLastItem(isOperator = true) {
 
         let lastItem;
 
@@ -179,10 +167,9 @@ class CalcController {
 
         }
 
-        if(!lastItem)
-        {
+        if (!lastItem) {
 
-            lastItem = (isOperator)  ? this._lastOperator : this._lastNumber;
+            lastItem = (isOperator) ? this._lastOperator : this._lastNumber;
 
         }
 
@@ -191,7 +178,7 @@ class CalcController {
 
     }
 
-    setLastNunberToDisplay() {
+    setLastNumberToDisplay() {
 
         let lastNumber = this.getLastItem(false);
 
@@ -221,7 +208,7 @@ class CalcController {
             else {
 
                 this.pushOperation(value);
-                this.setLastNunberToDisplay();
+                this.setLastNumberToDisplay();
 
             }
         }
@@ -237,9 +224,9 @@ class CalcController {
             else {
                 //Nunber
                 let newValue = this.getLastOperation().toString() + value.toString();
-                this.setLastOperation(newValue);
+                this.setLastOperation(parseFloat(newValue));
 
-                this.setLastNunberToDisplay();
+                this.setLastNumberToDisplay();
             }
         }
 
@@ -250,6 +237,22 @@ class CalcController {
     setError() {
 
         this.displayCalc = "Error";
+
+    }
+
+    addPoint() {
+
+    let lastOper = this.getLastOperation();
+
+        if(this.isOperator(lastOper) || !lastOper)
+        {
+            this.pushOperation('0.');
+        }
+        else
+        {
+            this.setLastOperation(lastOper.toString() + '.');
+        }
+        this.setLastNumberToDisplay();
 
     }
 
@@ -290,7 +293,7 @@ class CalcController {
                 break;
 
             case 'ponto':
-                this.addOperation('.');
+                this.addPoint();
                 break;
 
             case '0':
